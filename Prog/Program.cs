@@ -25,10 +25,10 @@ namespace Хоар
         {
             public Point q;
             public Point w;
-            public Edge(Point a, Point b)
+            public Edge(Point q, Point w)
             {
-                this.q = a;
-                this.w = b;
+                this.q = q;
+                this.w = w;
             }
         }
         public class Triangle
@@ -36,11 +36,11 @@ namespace Хоар
             public Point a;
             public Point b;
             public Point c;
-            public Triangle(Point a, Point b, Point c)
+            public Triangle(Point[] points)
             {
-                this.a = a;
-                this.b = b;
-                this.c = c;
+                this.a = points[0];
+                this.b = points[1];
+                this.c = points[2];
             }
         }
         //==========METHODS=========
@@ -116,29 +116,69 @@ namespace Хоар
         //==========================
         static void Main(string[] args)
         {
-            //===================---------  
-            Point a = new Point(5, 1);
-            Point b = new Point(1, 1);
-            Point c = new Point(1, 7);
+            //+++++++++++++++Massiv Triagles+++++++++++++++++++++++
+            Random gen = new Random();
+            Triangle[] abc = new Triangle[100];      
+            Point[] points = new Point[3];
+            Edge[] edges = new Edge[3];
+            for (int j = 0; j < abc.Length; j++)
+            {
+                for (int i = 0; i < points.Length; i++)
+                {
+                    points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
+                    for (int k = 0; k < edges.Length; k++)
+                    {
+                        if (edges.Length - 1 == k)
+                            edges[k] = new Edge(points[k - 2], points[k]);
+                        else
+                            edges[k] = new Edge(points[k], points[k + 1]);
+                    }
+                }
+                abc[j] = new Triangle(points);
+            }
 
-            Edge AB = new Edge(a, b);
-            Edge BC = new Edge(b, c);
-            Edge CA = new Edge(c, a);
+            
 
-            Triangle ABC = new Triangle(a, b, c);
+            for (int i = 0; i < abc.Length; i++)
+            {
+
+                if (Isosceles(abc[i]) == 1) Console.WriteLine("Isosceles");
+                else Console.WriteLine("Not Isosceles");
+
+                if (Right(abc[i]) == 1) Console.WriteLine("Right");
+                else Console.WriteLine("Not Right");
+
+
+                Console.WriteLine(Perimeter(abc[i]));
+                Console.WriteLine(Area(abc[i]));
+                Console.WriteLine("====-----------------====");
+            }
+            //++++++++++++++++++++++++++++++++++++++
+
+            //Edge AB = new Edge(a, b);
+            //Edge BC = new Edge(b, c);
+            //Edge CA = new Edge(c, a);
+
+            //Console.WriteLine(Distance(AB));
+            //Edge[] edges = new Edge[3];
+            //for (int i = 0; i < edges.Length; i++)
+            //{
+            //    if (i == edges.Length-1)
+            //    {
+            //        edges[i] = new Edge(points[i-2], points[i]);
+            //    }
+            //    else
+            //    {
+            //        edges[i] = new Edge(points[i], points[i + 1]);
+            //    }
+            //}
+
             //===================---------   
-            Console.WriteLine(Distance(AB));
-            Console.WriteLine(Distance(BC));
-            Console.WriteLine(Distance(CA));
+            //Console.WriteLine(Distance(AB));
+            //Console.WriteLine(Distance(BC));
+            //Console.WriteLine(Distance(CA));
 
-            Console.WriteLine(Perimeter(ABC));
-            Console.WriteLine(Area(ABC));
 
-            if (Isosceles(ABC) == 1) Console.WriteLine("Isosceles");
-            else Console.WriteLine("Not Isosceles");
-
-            if (Right(ABC) == 1) Console.WriteLine("Right");
-            else Console.WriteLine("Not Right");
 
 
 
