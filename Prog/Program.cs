@@ -23,149 +23,189 @@ namespace Хоар
         }
         public class Edge
         {
-            public Point q;
-            public Point w;
-            public Edge(Point q, Point w)
+            public Point a;
+            public Point b;
+            public Edge(Point a, Point b)
             {
-                this.q = q;
-                this.w = w;
+                this.a = a;
+                this.b = b;
             }
         }
         public class Triangle
         {
-            public Point a;
-            public Point b;
-            public Point c;
+            public Point[] a;
 
-            public Edge AB;
-            public Edge BC;
-            public Edge CA;
-            public Triangle(Point[] points, Edge[] edges)
+            public Triangle(Point[] points)
             {
-                this.a = points[0];
-                this.b = points[1];
-                this.c = points[2];
-                this.AB = edges[0];
-                this.BC = edges[1];
-                this.CA = edges[2];
+                this.a = new Point[points.Length];
+                for (int i = 0; i < points.Length; i++)
+                {
+                    this.a[i] = points[i];
+                }
+            }    
+        }
+        public class Polygon
+        {
+            public Triangle[] ABC;
+            public Edge[] AB;
+            public Polygon(Triangle[] tringles, Edge[] edges)
+            {
+                this.AB = new Edge[edges.Length];
+                this.ABC = new Triangle[tringles.Length];
+                for (int i = 0; i < tringles.Length; i++)
+                {
+                    this.ABC[i] = tringles[i];
+                }
+                for (int i = 0; i < edges.Length; i++)
+                {
+                    this.AB[i] = edges[i];   
+                }
             }
-            
-            
-            
         }
         //==========METHODS=========
-        public static double Distance(Triangle ABC, int i)
+        static void Distance(Polygon N)
         {
-            if (i == 1) return Math.Sqrt(Math.Pow(ABC.AB.w.x - ABC.AB.q.x, 2) + Math.Pow(ABC.AB.w.y - ABC.AB.q.y, 2));
-            if (i == 2) return Math.Sqrt(Math.Pow(ABC.BC.w.x - ABC.BC.q.x, 2) + Math.Pow(ABC.BC.w.y - ABC.BC.q.y, 2));
-            else return Math.Sqrt(Math.Pow(ABC.CA.w.x - ABC.CA.q.x, 2) + Math.Pow(ABC.CA.w.y - ABC.CA.q.y, 2));
+            double q, z = 0;
+            for (int i = 0; i < N.AB.Length; i++)
+            {
+                z++;
+                q = Math.Sqrt(Math.Pow(N.AB[i].b.x - N.AB[i].a.x, 2) + Math.Pow(N.AB[i].b.y - N.AB[i].a.y, 2));
+                Console.WriteLine("{0}ое ребро = {1}",z,q);
+            }
         }
-        public static double Area(Triangle ABC)
+        public static double Area(Polygon N)
         {
-            double q, p;
-            q = Math.Sqrt(Math.Pow(ABC.b.x - ABC.a.x, 2) + Math.Pow(ABC.b.y - ABC.a.y, 2));
-            q += Math.Sqrt(Math.Pow(ABC.c.x - ABC.b.x, 2) + Math.Pow(ABC.c.y - ABC.b.y, 2));
-            q += Math.Sqrt(Math.Pow(ABC.a.x - ABC.c.x, 2) + Math.Pow(ABC.a.y - ABC.c.y, 2));
-            q = q / 2;
-            p = q;
-            return q = Math.Sqrt(p * (p - Math.Sqrt(Math.Pow(ABC.b.x - ABC.a.x, 2) + Math.Pow(ABC.b.y - ABC.a.y, 2))) * (p - Math.Sqrt(Math.Pow(ABC.c.x - ABC.b.x, 2) + Math.Pow(ABC.c.y - ABC.b.y, 2))) * (p - Math.Sqrt(Math.Pow(ABC.a.x - ABC.c.x, 2) + Math.Pow(ABC.a.y - ABC.c.y, 2))));
+            double q = 0, p = 0;
+            for (int i = 0; i < N.ABC.Length; i++)
+            {
+                for (int k = 0; k < N.ABC[i].a.Length; k++)
+                {
+                    if (k == N.ABC[i].a.Length - 1) q += Math.Sqrt(Math.Pow(N.ABC[i].a[k - 2].x - N.ABC[i].a[k].x, 2) + Math.Pow(N.ABC[i].a[k - 2].y - N.ABC[i].a[k].y, 2));
+
+                    else q += Math.Sqrt(Math.Pow(N.ABC[i].a[k + 1].x - N.ABC[i].a[k].x, 2) + Math.Pow(N.ABC[i].a[k + 1].y - N.ABC[i].a[k].y, 2));
+                }
+                p += p + q;
+            }
+            return p;
+
+        }
+        public static double Perimeter(Polygon N)
+        {
+            double q = 0;
+            for (int i = 0; i < N.AB.Length; i++)
+            {
+                q+= Math.Sqrt(Math.Pow(N.AB[i].b.x - N.AB[i].a.x, 2) + Math.Pow(N.AB[i].b.y - N.AB[i].a.y, 2));
+            }
+            return q;
+        }
+        //public static double Isosceles(Polygon N)
+        //{
             
-        }
-        public static double Perimeter(Triangle ABC)
-        {
-            double q;
-            q = Math.Sqrt(Math.Pow(ABC.b.x - ABC.a.x, 2) + Math.Pow(ABC.b.y - ABC.a.y, 2));
-            q += Math.Sqrt(Math.Pow(ABC.c.x - ABC.b.x, 2) + Math.Pow(ABC.c.y - ABC.b.y, 2));
-            return q += Math.Sqrt(Math.Pow(ABC.a.x - ABC.c.x, 2) + Math.Pow(ABC.a.y - ABC.c.y, 2));
+        //}
+        //}
+        //public static double Right(Triangle ABC)
+        //{
+        //    double q, w, e;
+        //    q = Math.Sqrt(Math.Pow(ABC.b.x - ABC.a.x, 2) + Math.Pow(ABC.b.y - ABC.a.y, 2));
+        //    w = Math.Sqrt(Math.Pow(ABC.c.x - ABC.b.x, 2) + Math.Pow(ABC.c.y - ABC.b.y, 2));
+        //    e = Math.Sqrt(Math.Pow(ABC.a.x - ABC.c.x, 2) + Math.Pow(ABC.a.y - ABC.c.y, 2));
+        //    if (Math.Pow(q,2) == Math.Pow(w,2)+Math.Pow(e,2))
+        //    {
+        //        double i = 1;
+        //        return i;
+        //    }
+        //    if (Math.Pow(w,2) == Math.Pow(q,2)+Math.Pow(e,2))
+        //    {
+        //        double i = 1;
+        //        return i;
+        //    }
+        //    if (Math.Pow(e, 2) == Math.Pow(q, 2) + Math.Pow(w, 2))
+        //    {
+        //        double i = 1;
+        //        return i;
+        //    }
+        //    else
+        //    {
+        //        double i = 0;
+        //        return i;
+        //    }
 
-        }
-        public static double Isosceles(Triangle ABC)
-        {
-            double q, w, e;
-            q = Math.Sqrt(Math.Pow(ABC.b.x - ABC.a.x, 2) + Math.Pow(ABC.b.y - ABC.a.y, 2));
-            w = Math.Sqrt(Math.Pow(ABC.c.x - ABC.b.x, 2) + Math.Pow(ABC.c.y - ABC.b.y, 2));
-            e = Math.Sqrt(Math.Pow(ABC.a.x - ABC.c.x, 2) + Math.Pow(ABC.a.y - ABC.c.y, 2));
-            if (q == w || q == e || w == q || w == e || e == q || e == w)
-            {
-                int f = 1;
-                return f;
-            }
-            else
-            {
-                int f = 0;
-                return f;
-            }
-
-        }
-        public static double Right(Triangle ABC)
-        {
-            double q, w, e;
-            q = Math.Sqrt(Math.Pow(ABC.b.x - ABC.a.x, 2) + Math.Pow(ABC.b.y - ABC.a.y, 2));
-            w = Math.Sqrt(Math.Pow(ABC.c.x - ABC.b.x, 2) + Math.Pow(ABC.c.y - ABC.b.y, 2));
-            e = Math.Sqrt(Math.Pow(ABC.a.x - ABC.c.x, 2) + Math.Pow(ABC.a.y - ABC.c.y, 2));
-            if (Math.Pow(q,2) == Math.Pow(w,2)+Math.Pow(e,2))
-            {
-                double i = 1;
-                return i;
-            }
-            if (Math.Pow(w,2) == Math.Pow(q,2)+Math.Pow(e,2))
-            {
-                double i = 1;
-                return i;
-            }
-            if (Math.Pow(e, 2) == Math.Pow(q, 2) + Math.Pow(w, 2))
-            {
-                double i = 1;
-                return i;
-            }
-            else
-            {
-                double i = 0;
-                return i;
-            }
-
-        }
+        //}
         //==========================
         static void Main(string[] args)
         {
             //+++++++++++++++Massiv Triagles+++++++++++++++++++++++
             Random gen = new Random();
-            Triangle[] abc = new Triangle[2];      
+            Polygon[] N = new Polygon[1];
+            Triangle[] abc = new Triangle[98];      
             Point[] points = new Point[3];
-            Edge[] edges = new Edge[3];
-            for (int j = 0; j < abc.Length; j++)
+            Edge[] edges = new Edge[100];
+            int x = 0, z = 0;
+            for (int p = 0; p < N.Length; p++)
             {
-                for (int i = 0; i < points.Length; i++)
+                for (int h = 0; h < abc.Length; h++)
                 {
-                    points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                    for (int k = 0; k < edges.Length; k++)
+                    if (h == 0)
                     {
-                        if (edges.Length - 1 == k)
-                            edges[k] = new Edge(points[k - 2], points[k]);
-                        else
-                            edges[k] = new Edge(points[k], points[k + 1]);
-                    }
-                }
-                abc[j] = new Triangle(points, edges);
-            }
+                        for (int i = 0; i < points.Length; i++)
+                        {
+                            points[i] = new Point(gen.Next(0, 5), gen.Next(0, 5));
+                        }
+                        for (int k = 0; k < edges.Length; k++)
+                        {
+                            if (k == points.Length - 1)
+                            {
+                                x = k;
+                                break;
+                            }
+                            else edges[k] = new Edge(points[k], points[k + 1]);
 
+                        }
+                        abc[h] = new Triangle(points);
+                    }
+                    else
+                    {
+                        points[0] = points[1];
+                        points[1] = points[2];
+                        points[2] = new Point(gen.Next(0, 100), gen.Next(0, 100));
+                        for (int k = x; k < edges.Length;)
+                        {
+                            z++;
+                            if (x != 2)
+                            {
+                                edges[k] = new Edge(points[1], points[2]);
+                                x++;
+                                break;
+                            }
+                            else
+                            {
+                                edges[k] = new Edge(points[1], points[2]);
+                                x++;
+                                break;
+                            }
+                        }
+                        abc[h] = new Triangle(points);
+                    }
+
+                }
+                edges[edges.Length - 1] = new Edge(edges[0].a, edges[edges.Length - 2].b);
+                N[p] = new Polygon(abc, edges);
+            }               
             
             //==========OUTPUT==============================
-            for (int i = 0; i < abc.Length; i++)
+            for (int i = 0; i < N.Length; i++)
             {
 
-                if (Isosceles(abc[i]) == 1) Console.WriteLine("Isosceles");
-                else Console.WriteLine("Not Isosceles");
+                //if (Isosceles(abc[i]) == 1) Console.WriteLine("Isosceles");
+                //else Console.WriteLine("Not Isosceles");
 
-                if (Right(abc[i]) == 1) Console.WriteLine("Right");
-                else Console.WriteLine("Not Right");
+                //if (Right(abc[i]) == 1) Console.WriteLine("Right");
+                //else Console.WriteLine("Not Right");
 
-                Console.WriteLine("ребро AB = {0}",Distance(abc[i], 1));
-                Console.WriteLine("ребро BC = {0}",Distance(abc[i], 2));
-                Console.WriteLine("ребро CA = {0}",Distance(abc[i], 3));
+                Distance(N[i]);
 
-                Console.WriteLine("Периметр = {0}",Perimeter(abc[i]));
-                Console.WriteLine("Площадь = {0}",Area(abc[i]));
+                Console.WriteLine("Периметр = {0}",Perimeter(N[i]));
+                Console.WriteLine("Площадь = {0}",Area(N[i]));
                 Console.WriteLine("====-----------------====");
             }
             Console.ReadKey();
