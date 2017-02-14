@@ -75,18 +75,37 @@ namespace Хоар
         }
         public static double Area(Polygon N)
         {
-            double q = 0, p = 0;
+            double v = 0;
+            double[] mas = new double[3];
             for (int i = 0; i < N.ABC.Length; i++)
             {
+                double c = 1, p = 0, q = 0, f = 0;
                 for (int k = 0; k < N.ABC[i].a.Length; k++)
                 {
-                    if (k == N.ABC[i].a.Length - 1) q += Math.Sqrt(Math.Pow(N.ABC[i].a[k - 2].x - N.ABC[i].a[k].x, 2) + Math.Pow(N.ABC[i].a[k - 2].y - N.ABC[i].a[k].y, 2));
-
-                    else q += Math.Sqrt(Math.Pow(N.ABC[i].a[k + 1].x - N.ABC[i].a[k].x, 2) + Math.Pow(N.ABC[i].a[k + 1].y - N.ABC[i].a[k].y, 2));
+                    if (k == N.ABC[i].a.Length - 1)
+                    {
+                        q = Math.Sqrt(Math.Pow(N.ABC[i].a[k - 2].x - N.ABC[i].a[k].x, 2) + Math.Pow(N.ABC[i].a[k - 2].y - N.ABC[i].a[k].y, 2));
+                        mas[k] = q;
+                        p += q;
+                    }
+                    else
+                    {
+                        q = Math.Sqrt(Math.Pow(N.ABC[i].a[k + 1].x - N.ABC[i].a[k].x, 2) + Math.Pow(N.ABC[i].a[k + 1].y - N.ABC[i].a[k].y, 2));
+                        mas[k] = q;
+                        p += q;
+                    }
                 }
-                p += p + q;
+                p /= 2;
+                for (int k = 0; k < mas.Length; k++)
+                {
+                    f = p + mas[k];
+                    c = c * f;
+                }
+                p = p * c;
+                p = Math.Sqrt(p);
+                v = v + p;
             }
-            return p;
+            return v;
 
         }
         public static double Perimeter(Polygon N)
@@ -137,9 +156,9 @@ namespace Хоар
             //+++++++++++++++Massiv Triagles+++++++++++++++++++++++
             Random gen = new Random();
             Polygon[] N = new Polygon[1];
-            Triangle[] abc = new Triangle[98];      
+            Triangle[] abc = new Triangle[1];      
             Point[] points = new Point[3];
-            Edge[] edges = new Edge[100];
+            Edge[] edges = new Edge[3];
             int x = 0, z = 0;
             for (int p = 0; p < N.Length; p++)
             {
@@ -167,7 +186,7 @@ namespace Хоар
                     {
                         points[0] = points[1];
                         points[1] = points[2];
-                        points[2] = new Point(gen.Next(0, 100), gen.Next(0, 100));
+                        points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
                         for (int k = x; k < edges.Length;)
                         {
                             z++;
