@@ -42,7 +42,7 @@ namespace Хоар
                 {
                     this.a[i] = points[i];
                 }
-            }    
+            }
         }
         public class Polygon
         {
@@ -63,7 +63,6 @@ namespace Хоар
             }
             public void AREA(Triangle[] ABC)
             {
-
                 double v = 0, d = 0, SumPerimeter = 0;
                 for (int i = 0; i < ABC.Length; i++)
                 {
@@ -105,7 +104,7 @@ namespace Хоар
                     if (OneOrZeroOfPerimeter == 1) SumPerimeter += p;
 
                 }
-                if (d != 0) Console.WriteLine("Площадь фигуры = {0} \nСредняя площадь прямоугольных треугольников в этом многоугольнике = {1}", v, d/2);
+                if (d != 0) Console.WriteLine("Площадь фигуры = {0} \nСредняя площадь прямоугольных треугольников в этом многоугольнике = {1}", v, d / 2);
                 else Console.WriteLine("Площадь фигуры = {0}, в многоугольнике нет равнобедренных треугольников ", v);
                 if (SumPerimeter != 0) Console.WriteLine("\nСредний периметр всех прямоугольных треугольников в этом многоугольнике = {0}", SumPerimeter / 2);
                 else Console.WriteLine("==-==\nВ многоугольнике нет прямоугольных треугольников ");
@@ -161,36 +160,19 @@ namespace Хоар
                 else return 0;
             }
         }
-        public static Point[] GenerationOfPoints(Point[] points, int x)
+        public static Point[] GenerationOfPoints(Point[] points)
         {
             Random gen = new Random();
-            if (x == 0)
+            for (int i = 0; i < points.Length; i++)
             {
-                for (int i = 0; i < points.Length; i++)
-                {
-                    points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                }
-                if (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y)
-                {
-                    x++;
-                    GenerationOfPoints(points, x);
-                }
-            }
-            else
-            {    
-                if (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y)
-                {
-                    points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                    x++;
-                    GenerationOfPoints(points, x);
-                }
+                points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
             }
             return points;
+
         }
-        public static Edge[] GenerationOfEdge(Edge[] edges, Point[] points, int h, int c)
+        public static Edge[] GenerationOfEdge(Edge[] edges, Point[] points, int h, int x)
         {
             Random gen = new Random();
-            int z = 1;
             if (h == 0)
             {
                 for (int k = 0; k < edges.Length; k++)
@@ -208,8 +190,7 @@ namespace Хоар
                 points[0] = points[1];
                 points[1] = points[2];
                 points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                GenerationOfPoints(points, z);
-                for (int k = c; k < edges.Length; )
+                for (int k = x; k < edges.Length; )
                 {
                     if (k != 2)
                     {
@@ -232,32 +213,34 @@ namespace Хоар
             int q = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine();
             //+++++++++++++++Massiv Polygon++++++++++++++++++++++
+            Random gen = new Random();
             Polygon[] N = new Polygon[1];
-            Triangle[] abc = new Triangle[q - 2];      
+            Triangle[] abc = new Triangle[q - 2];
             Point[] points = new Point[3];
             Edge[] edges = new Edge[q];
-            int x = 0, c = 2;
+            int x = 2, z = 0;
             for (int p = 0; p < N.Length; p++)
             {
                 for (int h = 0; h < abc.Length; h++)
                 {
                     if (h == 0)
                     {
-                        GenerationOfPoints(points, x);
-                        GenerationOfEdge(edges, points, h, c);
+                        GenerationOfPoints(points);
+                        GenerationOfEdge(edges, points, h, x);
                         abc[h] = new Triangle(points);
                     }
                     else
                     {
-                        GenerationOfEdge(edges, points, h, c);
+                        GenerationOfEdge(edges, points, h, x);
                         abc[h] = new Triangle(points);
-                        c++;
+                        x++;
                     }
+
                 }
                 edges[edges.Length - 1] = new Edge(edges[edges.Length - 2].b, edges[0].a);
                 N[p] = new Polygon(abc, edges);
-            }               
-            
+            }
+
             //==========OUTPUT==============================
             for (int i = 0; i < N.Length; i++)
             {
@@ -270,4 +253,3 @@ namespace Хоар
         }
     }
 }
-
