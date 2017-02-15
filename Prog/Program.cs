@@ -160,6 +160,55 @@ namespace Хоар
                 else return 0;
             }
         }
+        public static Point[] GenerationOfPoints(Point[] points)
+        {
+            Random gen = new Random();
+            for (int i = 0; i < points.Length; i++)
+            {
+                points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
+            }
+            return points;
+            
+        }
+        public static Edge[] GenerationOfEdge(Edge[] edges, Point[] points, int h)
+        {
+            Random gen = new Random();
+            int z = 0;
+            if (h == 0)
+            {
+                for (int k = 0; k < edges.Length; k++)
+                {
+                    if (k == points.Length - 1)
+                    {
+                        break;
+                    }
+                    else edges[k] = new Edge(points[k], points[k + 1]);
+                }
+                return edges;
+            }
+            else
+            {
+                points[0] = points[1];
+                points[1] = points[2];
+                points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
+                for (int k = 2; k < edges.Length; )
+                {
+                    z++;
+                    if (k != 2)
+                    {
+                        edges[k] = new Edge(points[1], points[2]);
+                        break;
+                    }
+                    else
+                    {
+                        edges[k] = new Edge(points[1], points[2]);
+                        break;
+                    }
+                }
+                return edges;
+            }
+
+        }
         static void Main(string[] args)
         {
             Console.Write("Скольки угольник вас интерисует: ");
@@ -178,48 +227,18 @@ namespace Хоар
                 {
                     if (h == 0)
                     {
-                        for (int i = 0; i < points.Length; i++)
-                        {
-                            points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                        }
-                        for (int k = 0; k < edges.Length; k++)
-                        {
-                            if (k == points.Length - 1)
-                            {
-                                x = k;
-                                break;
-                            }
-                            else edges[k] = new Edge(points[k], points[k + 1]);
-
-                        }
+                        GenerationOfPoints(points);
+                        GenerationOfEdge(edges, points, h);
                         abc[h] = new Triangle(points);
                     }
                     else
                     {
-                        points[0] = points[1];
-                        points[1] = points[2];
-                        points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                        for (int k = x; k < edges.Length;)
-                        {
-                            z++;
-                            if (x != 2)
-                            {
-                                edges[k] = new Edge(points[1], points[2]);
-                                x++;
-                                break;
-                            }
-                            else
-                            {
-                                edges[k] = new Edge(points[1], points[2]);
-                                x++;
-                                break;
-                            }
-                        }
+                        GenerationOfEdge(edges, points, h);
                         abc[h] = new Triangle(points);
                     }
 
                 }
-                edges[edges.Length - 1] = new Edge(edges[edges.Length - 2].b, edges[0].a );
+                edges[edges.Length - 1] = new Edge(edges[edges.Length - 2].b, edges[0].a);
                 N[p] = new Polygon(abc, edges);
             }               
             
