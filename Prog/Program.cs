@@ -63,6 +63,7 @@ namespace Хоар
             }
             public void AREA(Triangle[] ABC)
             {
+
                 double v = 0, d = 0, SumPerimeter = 0;
                 for (int i = 0; i < ABC.Length; i++)
                 {
