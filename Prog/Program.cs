@@ -160,20 +160,36 @@ namespace Хоар
                 else return 0;
             }
         }
-        public static Point[] GenerationOfPoints(Point[] points)
+        public static Point[] GenerationOfPoints(Point[] points, int x)
         {
             Random gen = new Random();
-            for (int i = 0; i < points.Length; i++)
+            if (x == 0)
             {
-                points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
+                for (int i = 0; i < points.Length; i++)
+                {
+                    points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
+                }
+                if (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y)
+                {
+                    x++;
+                    GenerationOfPoints(points, x);
+                }
+            }
+            else
+            {    
+                if (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y)
+                {
+                    points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
+                    x++;
+                    GenerationOfPoints(points, x);
+                }
             }
             return points;
-            
         }
-        public static Edge[] GenerationOfEdge(Edge[] edges, Point[] points, int h)
+        public static Edge[] GenerationOfEdge(Edge[] edges, Point[] points, int h, int c)
         {
             Random gen = new Random();
-            int z = 0;
+            int z = 1;
             if (h == 0)
             {
                 for (int k = 0; k < edges.Length; k++)
@@ -191,9 +207,9 @@ namespace Хоар
                 points[0] = points[1];
                 points[1] = points[2];
                 points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                for (int k = 2; k < edges.Length; )
+                GenerationOfPoints(points, z);
+                for (int k = c; k < edges.Length; )
                 {
-                    z++;
                     if (k != 2)
                     {
                         edges[k] = new Edge(points[1], points[2]);
@@ -215,28 +231,27 @@ namespace Хоар
             int q = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine();
             //+++++++++++++++Massiv Polygon++++++++++++++++++++++
-            Random gen = new Random();
             Polygon[] N = new Polygon[1];
             Triangle[] abc = new Triangle[q - 2];      
             Point[] points = new Point[3];
             Edge[] edges = new Edge[q];
-            int x = 0, z = 0;
+            int x = 0, c = 2;
             for (int p = 0; p < N.Length; p++)
             {
                 for (int h = 0; h < abc.Length; h++)
                 {
                     if (h == 0)
                     {
-                        GenerationOfPoints(points);
-                        GenerationOfEdge(edges, points, h);
+                        GenerationOfPoints(points, x);
+                        GenerationOfEdge(edges, points, h, c);
                         abc[h] = new Triangle(points);
                     }
                     else
                     {
-                        GenerationOfEdge(edges, points, h);
+                        GenerationOfEdge(edges, points, h, c);
                         abc[h] = new Triangle(points);
+                        c++;
                     }
-
                 }
                 edges[edges.Length - 1] = new Edge(edges[edges.Length - 2].b, edges[0].a);
                 N[p] = new Polygon(abc, edges);
