@@ -214,7 +214,7 @@ namespace Хоар
             Console.Write("Скольки угольник вас интерисует: ");
             int q = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine();
-            //+++++++++++++++Massiv Polygon+++++++++++++++++++++++
+            //+++++++++++++++Massiv Polygon++++++++++++++++++++++
             Random gen = new Random();
             Polygon[] N = new Polygon[1];
             Triangle[] abc = new Triangle[q - 2];      
