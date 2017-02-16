@@ -13,8 +13,8 @@ namespace Хоар
         //=========CLASS============
         public class Point
         {
-            public double x;
-            public double y;
+            public int x;
+            public int y;
             public Point(int x, int y)
             {
                 this.x = x;
@@ -42,7 +42,7 @@ namespace Хоар
                 {
                     this.a[i] = points[i];
                 }
-            }    
+            }
         }
         public class Polygon
         {
@@ -63,6 +63,7 @@ namespace Хоар
             }
             public void AREA(Triangle[] ABC)
             {
+
                 double v = 0, d = 0, SumPerimeter = 0;
                 for (int i = 0; i < ABC.Length; i++)
                 {
@@ -104,7 +105,7 @@ namespace Хоар
                     if (OneOrZeroOfPerimeter == 1) SumPerimeter += p;
 
                 }
-                if (d != 0) Console.WriteLine("Площадь фигуры = {0} \nСредняя площадь прямоугольных треугольников в этом многоугольнике = {1}", v, d/2);
+                if (d != 0) Console.WriteLine("Площадь фигуры = {0} \nСредняя площадь прямоугольных треугольников в этом многоугольнике = {1}", v, d / 2);
                 else Console.WriteLine("Площадь фигуры = {0}, в многоугольнике нет равнобедренных треугольников ", v);
                 if (SumPerimeter != 0) Console.WriteLine("\nСредний периметр всех прямоугольных треугольников в этом многоугольнике = {0}", SumPerimeter / 2);
                 else Console.WriteLine("==-==\nВ многоугольнике нет прямоугольных треугольников ");
@@ -167,7 +168,8 @@ namespace Хоар
             {
                 for (int i = 0; i < points.Length; i++)
                 {
-                    points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
+                    points[i] = new Point(gen.Next(10, 20), gen.Next(10, 20));
+
                 }
                 if (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y)
                 {
@@ -176,10 +178,10 @@ namespace Хоар
                 }
             }
             else
-            {    
+            {
                 if (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y)
                 {
-                    points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
+                    points[2] = new Point(gen.Next(10, 20), gen.Next(10, 20));
                     x++;
                     GenerationOfPoints(points, x);
                 }
@@ -206,24 +208,22 @@ namespace Хоар
             {
                 points[0] = points[1];
                 points[1] = points[2];
-                points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                GenerationOfPoints(points, z);
+                points[2] = new Point(gen.Next(0, 20), gen.Next(0, 20));
                 for (int k = c; k < edges.Length; )
                 {
                     if (k != 2)
                     {
-                        edges[k] = new Edge(points[1], points[2]);
+                        edges[k] = new Edge(points[0], points[1]);
                         break;
                     }
                     else
                     {
-                        edges[k] = new Edge(points[1], points[2]);
+                        edges[k] = new Edge(points[0], points[1]);
                         break;
                     }
                 }
                 return edges;
             }
-
         }
         static void Main(string[] args)
         {
@@ -231,8 +231,8 @@ namespace Хоар
             int q = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine();
             //+++++++++++++++Massiv Polygon++++++++++++++++++++++
-            Polygon[] N = new Polygon[1];
-            Triangle[] abc = new Triangle[q - 2];      
+            Polygon[] N = new Polygon[6];
+            Triangle[] abc = new Triangle[q - 2];
             Point[] points = new Point[3];
             Edge[] edges = new Edge[q];
             int x = 0, c = 2;
@@ -255,8 +255,7 @@ namespace Хоар
                 }
                 edges[edges.Length - 1] = new Edge(edges[edges.Length - 2].b, edges[0].a);
                 N[p] = new Polygon(abc, edges);
-            }               
-            
+            }
             //==========OUTPUT==============================
             for (int i = 0; i < N.Length; i++)
             {
@@ -269,4 +268,3 @@ namespace Хоар
         }
     }
 }
-
