@@ -30,11 +30,28 @@ namespace Хоар
                 this.a = a;
                 this.b = b;
             }
+            //======Methods-----
+            public static int CheckOnBulge(Edge[] edges)
+            {
+                int y = 0;
+                for (int i = 0; i < edges.Length; i++)
+                {
+                    y = (edges[i].a.x * edges[i].b.y) - (edges[i].a.y * edges[i].b.x);
+                    if (y < 0) break;
+                }
+                if (y < 0) return 0;
+                else return 1;
+            }
+            public static int Distance(Point a, Point b)
+            {
+                int q = 0;
+                q = (int)Math.Sqrt(Math.Pow(b.x - a.x, 2) + Math.Pow(b.y - a.y, 2));
+                return q;
+            }
         }
         public class Triangle
         {
             public Point[] a;
-
             public Triangle(Point[] points)
             {
                 this.a = new Point[points.Length];
@@ -42,6 +59,112 @@ namespace Хоар
                 {
                     this.a[i] = points[i];
                 }
+            }
+            //======Methods-----
+            public static double AreaOfTriangleForPolygon(Triangle ABC)
+            {
+                int[] mas = new int[ABC.a.Length];
+                double SemiPerimeter = 0;
+                double c = 1, f = 0;
+                for (int i = 0; i < ABC.a.Length; i++)
+                {
+                    if (i == ABC.a.Length - 1)
+                    {
+                        mas[i] = Edge.Distance(ABC.a[i - 2], ABC.a[i]);
+                        SemiPerimeter += mas[i];
+                    }
+                    else
+                    {
+                        mas[i] = Edge.Distance(ABC.a[i], ABC.a[i + 1]);
+                        SemiPerimeter += mas[i];
+                    }
+                }
+                SemiPerimeter = SemiPerimeter / 2;
+                for (int i = 0; i < mas.Length; i++)
+                {
+                    f = SemiPerimeter - mas[i];
+                    c = c * f;
+                }
+                SemiPerimeter *= c;
+                return c;
+            }
+            public static double AreaOfTriangle(Triangle ABC)
+            {
+                int[] mas = new int[ABC.a.Length];
+                double SemiPerimeter = 0;
+                double c = 1, f = 0;
+                for (int i = 0; i < ABC.a.Length; i++)
+                {
+                    if (i == ABC.a.Length - 1)
+                    {
+                        mas[i] = Edge.Distance(ABC.a[i - 2], ABC.a[i]);
+                        SemiPerimeter += mas[i];
+                    }
+                    else
+                    {
+                        mas[i] = Edge.Distance(ABC.a[i], ABC.a[i + 1]);
+                        SemiPerimeter += mas[i];
+                    }
+                }
+                SemiPerimeter = SemiPerimeter / 2;
+                for (int i = 0; i < mas.Length; i++)
+                {
+                    f = SemiPerimeter - mas[i];
+                    c = c * f;
+                }
+                SemiPerimeter *= c;
+                return c;
+            }
+            public static int PerimeterOfTriangle(Triangle ABC)
+            {
+                int x = 0;
+                for (int i = 0; i < ABC.a.Length; i++)
+                {
+                    if (i == ABC.a.Length - 1) x += Edge.Distance(ABC.a[i - 2], ABC.a[i]);
+                    else x += Edge.Distance(ABC.a[i], ABC.a[i + 1]);
+                }
+                return x;
+            }
+            public static double CheckOfRight(Triangle[] ABC)
+            {
+                double x = 0, z = 0;
+                for (int i = 0; i < ABC.Length; i++)
+			    {
+			        if (Math.Pow(Edge.Distance(ABC[i].a[0], ABC[i].a[1]), 2) == (Math.Pow(Edge.Distance(ABC[i].a[1], ABC[i].a[2]), 2)) + (Math.Pow(Edge.Distance(ABC[i].a[2], ABC[i].a[0]), 2)))
+                    {
+                        x += AreaOfTriangle(ABC[i]);
+                        z++;
+                    }
+                    if (Math.Pow(Edge.Distance(ABC[i].a[1], ABC[i].a[2]), 2) == (Math.Pow(Edge.Distance(ABC[i].a[0], ABC[i].a[1]), 2)) + (Math.Pow(Edge.Distance(ABC[i].a[2], ABC[i].a[0]), 2)))
+                    {
+                        x += AreaOfTriangle(ABC[i]);
+                        z++;
+                    }
+                    if (Math.Pow(Edge.Distance(ABC[i].a[2], ABC[i].a[0]), 2) == (Math.Pow(Edge.Distance(ABC[i].a[0], ABC[i].a[1]), 2)) + (Math.Pow(Edge.Distance(ABC[i].a[1], ABC[i].a[2]), 2)))
+                    {
+                        x += AreaOfTriangle(ABC[i]);
+                        z++;
+                    }
+			    }
+                if (x > 0) return x / z;
+                else return 0;
+
+                
+            }
+            public static int CheckOfIsosceles(Triangle[] ABC)
+            {
+                int x = 0, z = 0, y = 0;
+                for (int i = 0; i < ABC.Length; i++)
+                {
+                    if (Edge.Distance(ABC[i].a[0], ABC[i].a[1]) == Edge.Distance(ABC[i].a[1], ABC[i].a[2]) || Edge.Distance(ABC[i].a[1], ABC[i].a[2]) == Edge.Distance(ABC[i].a[2], ABC[i].a[0]) || Edge.Distance(ABC[i].a[2], ABC[i].a[0]) == Edge.Distance(ABC[i].a[0], ABC[i].a[1]))
+                    {
+                        x = PerimeterOfTriangle(ABC[i]);
+                        z += x;
+                        y++;
+                    }
+                }
+                if (z > 0) return z /= y;
+                else return 0;
             }
         }
         public class Polygon
@@ -61,62 +184,23 @@ namespace Хоар
                     this.AB[i] = edges[i];
                 }
             }
-            public void AREA(Triangle[] ABC)
+            //======Methods-----
+            public void AreaOfPolygon(Triangle[] ABC)
             {
-
-                double v = 0, d = 0, SumPerimeter = 0;
+                double q = 0, z = 0;
                 for (int i = 0; i < ABC.Length; i++)
                 {
-                    int[] mas = new int[3];
-                    int[] CheckPerimeter = new int[3];
-                    int q;
-                    double c = 1, p = 0, f = 0, m = 0, OneOrZeroOfPerimeter = 0, Perimeter = 0;
-                    for (int k = 0; k < ABC[i].a.Length; k++)
-                    {
-                        if (k == ABC[i].a.Length - 1)
-                        {
-                            q = (int)Math.Sqrt(Math.Pow(ABC[i].a[k - 2].x - ABC[i].a[k].x, 2) + Math.Pow(ABC[i].a[k - 2].y - ABC[i].a[k].y, 2));
-                            mas[k] = q;
-                            CheckPerimeter[k] = q;
-                            p += q;
-                            Perimeter += q;
-                        }
-                        else
-                        {
-                            q = (int)Math.Sqrt(Math.Pow(ABC[i].a[k + 1].x - ABC[i].a[k].x, 2) + Math.Pow(ABC[i].a[k + 1].y - ABC[i].a[k].y, 2));
-                            mas[k] = q;
-                            CheckPerimeter[k] = q;
-                            p += q;
-                            Perimeter += q;
-                        }
-                    }
-                    p /= 2;
-                    for (int k = 0; k < mas.Length; k++)
-                    {
-                        f = p - mas[k];
-                        c = c * f;
-                    }
-                    p = p * c;
-                    p = Math.Sqrt(p);
-                    v += p;
-                    m = Isosceles(mas);
-                    OneOrZeroOfPerimeter = Right(CheckPerimeter);
-                    if (m == 1) d += p;
-                    if (OneOrZeroOfPerimeter == 1) SumPerimeter += p;
-
+                    q = Triangle.AreaOfTriangleForPolygon(ABC[i]);
+                    z += q;
                 }
-                if (d != 0) Console.WriteLine("Площадь фигуры = {0} \nСредняя площадь прямоугольных треугольников в этом многоугольнике = {1}", v, d / 2);
-                else Console.WriteLine("Площадь фигуры = {0}, в многоугольнике нет равнобедренных треугольников ", v);
-                if (SumPerimeter != 0) Console.WriteLine("\nСредний периметр всех прямоугольных треугольников в этом многоугольнике = {0}", SumPerimeter / 2);
-                else Console.WriteLine("==-==\nВ многоугольнике нет прямоугольных треугольников ");
-
+                Console.WriteLine("Площадь фигуры = {0}", z);
             }
             public void Perimeter(Edge[] AB)
             {
                 int q, PerimeterOfPolygon = 0;
                 for (int i = 0; i < AB.Length; i++)
                 {
-                    q = (int)Math.Sqrt(Math.Pow(AB[i].b.x - AB[i].a.x, 2) + Math.Pow(AB[i].b.y - AB[i].a.y, 2));
+                    q = Edge.Distance(AB[i].a, AB[i].b);
                     PerimeterOfPolygon += q;
                 }
                 Console.WriteLine("Периметр многоугольника = {0}", PerimeterOfPolygon);
@@ -127,38 +211,9 @@ namespace Хоар
                 for (int i = 0; i < AB.Length; i++)
                 {
                     z++;
-                    q = (int)Math.Sqrt(Math.Pow(AB[i].b.x - AB[i].a.x, 2) + Math.Pow(AB[i].b.y - AB[i].a.y, 2));
+                    q = Edge.Distance(AB[i].a, AB[i].b);
                     Console.WriteLine("{0}ое ребро = {1}", z, q);
                 }
-            }
-            public static int Right(int[] Edges)
-            {
-                if (Math.Pow(Edges[0], 2) == Math.Pow(Edges[0], 2) + Math.Pow(Edges[0], 2))
-                {
-                    int i = 1;
-                    return i;
-                }
-                if (Math.Pow(Edges[1], 2) == Math.Pow(Edges[0], 2) + Math.Pow(Edges[2], 2))
-                {
-                    int i = 1;
-                    return i;
-                }
-                if (Math.Pow(Edges[2], 2) == Math.Pow(Edges[0], 2) + Math.Pow(Edges[1], 2))
-                {
-                    int i = 1;
-                    return i;
-                }
-                else
-                {
-                    int i = 0;
-                    return i;
-
-                }
-            }
-            public static int Isosceles(int[] Edges)
-            {
-                if (Edges[0] == Edges[1] || Edges[0] == Edges[2] || Edges[1] == Edges[2]) return 1;
-                else return 0;
             }
         }
         public static Point[] GenerationOfPoints(Point[] points, int x)
@@ -168,7 +223,7 @@ namespace Хоар
             {
                 for (int i = 0; i < points.Length; i++)
                 {
-                    points[i] = new Point(gen.Next(10, 20), gen.Next(10, 20));
+                    points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
 
                 }
                 if (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y)
@@ -181,7 +236,7 @@ namespace Хоар
             {
                 if (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y)
                 {
-                    points[2] = new Point(gen.Next(10, 20), gen.Next(10, 20));
+                    points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
                     x++;
                     GenerationOfPoints(points, x);
                 }
@@ -191,13 +246,14 @@ namespace Хоар
         public static Edge[] GenerationOfEdge(Edge[] edges, Point[] points, int h, int c)
         {
             Random gen = new Random();
-            int z = 1;
+            int z = 0;
             if (h == 0)
             {
                 for (int k = 0; k < edges.Length; k++)
                 {
-                    if (k == points.Length - 1)
+                    if (k == points.Length - 2)
                     {
+                        edges[k] = new Edge(points[0], points[k + 1]);
                         break;
                     }
                     else edges[k] = new Edge(points[k], points[k + 1]);
@@ -208,59 +264,69 @@ namespace Хоар
             {
                 points[0] = points[1];
                 points[1] = points[2];
-                points[2] = new Point(gen.Next(0, 20), gen.Next(0, 20));
+                points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
                 for (int k = c; k < edges.Length; )
                 {
+                    z++;
                     if (k != 2)
                     {
-                        edges[k] = new Edge(points[0], points[1]);
+                        edges[k] = new Edge(points[0], points[2]);
                         break;
                     }
                     else
                     {
-                        edges[k] = new Edge(points[0], points[1]);
+                        edges[k] = new Edge(points[0], points[2]);
                         break;
                     }
                 }
                 return edges;
             }
+
         }
+
         static void Main(string[] args)
         {
             Console.Write("Скольки угольник вас интерисует: ");
             int q = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine();
             //+++++++++++++++Massiv Polygon++++++++++++++++++++++
-            Polygon[] N = new Polygon[6];
+            Polygon[] N = new Polygon[1];
             Triangle[] abc = new Triangle[q - 2];
             Point[] points = new Point[3];
             Edge[] edges = new Edge[q];
             int x = 0, c = 2;
             for (int p = 0; p < N.Length; p++)
             {
-                for (int h = 0; h < abc.Length; h++)
-                {
-                    if (h == 0)
+                    for (int h = 0; h < abc.Length; h++)
                     {
-                        GenerationOfPoints(points, x);
-                        GenerationOfEdge(edges, points, h, c);
-                        abc[h] = new Triangle(points);
+                        if (h == 0)
+                        {
+                            GenerationOfPoints(points, x);
+                            GenerationOfEdge(edges, points, h, c);
+                            abc[h] = new Triangle(points);
+                        }
+                        else
+                        {
+                            GenerationOfEdge(edges, points, h, c);
+                            abc[h] = new Triangle(points);
+                            c++;
+                        }
                     }
-                    else
-                    {
-                        GenerationOfEdge(edges, points, h, c);
-                        abc[h] = new Triangle(points);
-                        c++;
-                    }
-                }
-                edges[edges.Length - 1] = new Edge(edges[edges.Length - 2].b, edges[0].a);
-                N[p] = new Polygon(abc, edges);
+                    edges[edges.Length - 1] = new Edge(edges[edges.Length - 2].b, edges[edges.Length - 3].b);
+                    N[p] = new Polygon(abc, edges);
             }
             //==========OUTPUT==============================
             for (int i = 0; i < N.Length; i++)
             {
+                if (N[i].ABC.Length > 1)
+                {
+                    if (Triangle.CheckOfIsosceles(N[i].ABC) > 0) Console.WriteLine("Средний периметр треугольников в многоугольнике = {0}", Triangle.CheckOfIsosceles(N[i].ABC));
+                    else Console.WriteLine("В многоугольнике нет равнобедренных треугольников");
+                    if (Triangle.CheckOfRight(N[i].ABC) > 0) Console.WriteLine("Средняя площадь треугольников в многоугольнике = {0}", Triangle.CheckOfRight(N[i].ABC));
+                    else Console.WriteLine("В многоугольнике нет прямоугольных треугольников");
+                }
                 N[i].Distance(N[i].AB);
-                N[i].AREA(N[i].ABC);
+                N[i].AreaOfPolygon(N[i].ABC);
                 N[i].Perimeter(N[i].AB);
                 Console.WriteLine("====-----------------====");
             }
