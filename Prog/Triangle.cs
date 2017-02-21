@@ -18,32 +18,16 @@ namespace Prog
             }
         }
         //======Methods-----
-        public static double AreaOfTriangleForPolygon(Triangle ABC)
+        public static double AreaOfTriangleForPolygon(Triangle[] ABC)
         {
-            int[] mas = new int[ABC.a.Length];
-            double SemiPerimeter = 0;
-            double c = 1, f = 0;
-            for (int i = 0; i < ABC.a.Length; i++)
+            int[] mas = new int[ABC.Length];
+            double q = 0, z = 0;
+            for (int i = 0; i < ABC.Length; i++)
             {
-                if (i == ABC.a.Length - 1)
-                {
-                    mas[i] = Edge.Distance(ABC.a[i - 2], ABC.a[i]);
-                    SemiPerimeter += mas[i];
-                }
-                else
-                {
-                    mas[i] = Edge.Distance(ABC.a[i], ABC.a[i + 1]);
-                    SemiPerimeter += mas[i];
-                }
+                q = AreaOfTriangle(ABC[i]);
+                z += q;
             }
-            SemiPerimeter = SemiPerimeter / 2;
-            for (int i = 0; i < mas.Length; i++)
-            {
-                f = SemiPerimeter - mas[i];
-                c = c * f;
-            }
-            SemiPerimeter *= c;
-            return c;
+            return z;
         }
         public static double AreaOfTriangle(Triangle ABC)
         {
@@ -70,7 +54,7 @@ namespace Prog
                 c = c * f;
             }
             SemiPerimeter *= c;
-            return c;
+            return SemiPerimeter;
         }
         public static int PerimeterOfTriangle(Triangle ABC)
         {

@@ -26,13 +26,9 @@ namespace Prog
         //======Methods-----
         public void AreaOfPolygon(Triangle[] ABC)
         {
-            double q = 0, z = 0;
-            for (int i = 0; i < ABC.Length; i++)
-            {
-                q = Triangle.AreaOfTriangleForPolygon(ABC[i]);
-                z += q;
-            }
-            Console.WriteLine("Площадь фигуры = {0}", z);
+            double q = 0;
+            q = Triangle.AreaOfTriangleForPolygon(ABC);
+            Console.WriteLine("Площадь фигуры = {0}", q);
         }
         public void Perimeter(Edge[] AB)
         {

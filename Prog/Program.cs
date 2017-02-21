@@ -11,75 +11,6 @@ namespace Хоар
 {
     class Program
     {
-        public static Point[] GenerationOfPoints(Point[] points, int x)
-        {
-            Random gen = new Random();
-            if (x == 0)
-            {
-                do
-                {
-                    for (int i = 0; i < points.Length; i++)
-                    {
-                        points[i] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                    }
-                } while (points[0].y == points[1].y && points[0].y == points[2].y && points[1].y == points[2].y);                
-            }
-            else
-            {
-                if (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y)
-                {
-                    do
-                    {
-                        points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                    } while (points[2].x == points[1].x && points[2].y == points[1].y || points[2].x == points[0].x && points[2].y == points[0].y);
-                    x++;
-                    GenerationOfPoints(points, x);
-                }
-            }
-            return points;
-        }
-        public static Edge[] GenerationOfEdge(Edge[] edges, Point[] points, int h, int c)
-        {
-            Random gen = new Random();
-            int z = 1;
-            if (h == 0)
-            {
-                for (int k = 0; k < edges.Length; k++)
-                {
-                    if (k == points.Length - 2)
-                    {
-                        edges[k] = new Edge(points[0], points[k + 1]);
-                        break;
-                    }
-                    else edges[k] = new Edge(points[k], points[k + 1]);
-                }
-                return edges;
-            }
-            else
-            {
-                points[0] = points[1];
-                points[1] = points[2];
-                points[2] = new Point(gen.Next(0, 10), gen.Next(0, 10));
-                points = GenerationOfPoints(points, z);
-                for (int k = c; k < edges.Length; )
-                {
-                    z++;
-                    if (k != 2)
-                    {
-                        edges[k] = new Edge(points[0], points[2]);
-                        break;
-                    }
-                    else
-                    {
-                        edges[k] = new Edge(points[0], points[2]);
-                        break;
-                    }
-                }
-                return edges;
-            }
-
-        }
-
         static void Main(string[] args)
         {
             Console.Write("Скольки угольник вас интерисует: ");
@@ -97,13 +28,13 @@ namespace Хоар
                 {
                     if (h == 0)
                     {
-                        GenerationOfPoints(points, x);
-                        GenerationOfEdge(edges, points, h, c);
+                        Point.GenerationOfPoints(points, x);
+                        Edge.GenerationOfEdge(edges, points, h, c); 
                         abc[h] = new Triangle(points);
                     }
                     else
                     {
-                        GenerationOfEdge(edges, points, h, c);
+                        Edge.GenerationOfEdge(edges, points, h, c); 
                         abc[h] = new Triangle(points);
                         c++;
                     }
@@ -116,7 +47,7 @@ namespace Хоар
             {
                 if (N[i].ABC.Length > 1)
                 {
-                    if (Triangle.CheckOfIsosceles(N[i].ABC) > 0) Console.WriteLine("Средний периметр треугольников в многоугольнике = {0}", Triangle.CheckOfIsosceles(N[i].ABC));
+                    if (Triangle.CheckOfIsosceles(N[i].ABC) > 0) Console.WriteLine("Средний периметр равнобедренных треугольников в многоугольнике = {0}", Triangle.CheckOfIsosceles(N[i].ABC));
                     else Console.WriteLine("В многоугольнике нет равнобедренных треугольников");
                     if (Triangle.CheckOfRight(N[i].ABC) > 0) Console.WriteLine("Средняя площадь треугольников в многоугольнике = {0}", Triangle.CheckOfRight(N[i].ABC));
                     else Console.WriteLine("В многоугольнике нет прямоугольных треугольников");
