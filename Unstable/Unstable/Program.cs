@@ -19,25 +19,32 @@ namespace Unstable
             Point[] points = new Point[3];
             Edge[] edges = new Edge[q];
             Random gen = new Random();
-            
-            
+
+
             for (int k = 0; k < polygons.Length; k++)
             {
                 for (int i = 0; i < triangle.Length; i++)
                 {
                     if (i == 0)
                     {
-                        for (int j = 0; j < points.Length; j++)
+                        do
                         {
-                            points[j] = new Point(gen.Next(0, 20), gen.Next(0, 20));
-                        }
+                            for (int j = 0; j < points.Length; j++)
+                            {
+                                points[j] = new Point(gen.Next(0, 20), gen.Next(0, 20));
+                            }
+                        } while (points[0] == points[1] || points[0] == points[2] || points[1] == points[2]);
                         triangle[i] = new Triangle(points);
                     }
                     else
                     {
-                        points[0] = points[1];
-                        points[1] = points[2];
-                        points[2] = new Point(gen.Next(0, 20), gen.Next(0, 20));
+                        do
+                        {
+                            points[0] = points[1];
+                            points[1] = points[2];
+                            points[2] = new Point(gen.Next(0, 20), gen.Next(0, 20));
+                        } while (points[0] == points[1] || points[0] == points[2] || points[1] == points[2]);
+
                         triangle[i] = new Triangle(points);
                     }
                 }
