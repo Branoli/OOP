@@ -29,29 +29,28 @@ namespace Game
         }
         static void Main(string[] args)
         {
-            Box[] box = new Box[1];
+            Box box;
             Square[] number = new Square[16];
             Random gen = new Random();
             int q = 1;
-            for (int i = 0; i < box.Length; i++)
+            for (int j = 0; j < number.Length; j++)
             {
-                for (int j = 0; j < number.Length; j++)
+                if (j == 15)
                 {
-                    if (j == 15)
-                    {
-                        number[j] = new Square(0);
-                    }
-                    else
-                    {
-                        number[j] = new Square(q);
-                        q++;
-                    }
+                    number[j] = new Square(0);
                 }
-                box[i] = new Box(number);
+                else
+                {
+                    number[j] = new Square(q);
+                    q++;
+                }
             }
-                
-            Console.ReadKey();
+            box = new Box(number);
 
+
+
+
+            Console.ReadKey();
         }
     }
 }
