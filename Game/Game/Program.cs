@@ -11,9 +11,6 @@ namespace Game
         static void Main(string[] args)
         {
             Knuckles knuckles = new Knuckles();
-
-
-            Console.ReadKey();
         }
     }
 }
