@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    class Knuckles
+    class Knuckle
     {
         public int[,] ArrOfKnuckles;
-        public Knuckles()
+        public Knuckle()
         {
             this.ArrOfKnuckles = new int[4, 4];
             this.ArrOfKnuckles = ArrOfKnuckle();
@@ -57,6 +57,7 @@ namespace Game
                 {
                     if (ArrOfKnuckles[i, j] == q)
                     {
+
                         for (int n = 0; n < 4; n++)
                         {
                             for (int k = 0; k < 4; k++)
@@ -130,9 +131,9 @@ namespace Game
                             }
                             break;
                         }
-                        if ( ArrOfKnuckles[1, 3] == 0)
+                        if (ArrOfKnuckles[1, 3] == 0)
                         {
-                            if ( (ArrOfKnuckles[1, 3 - 1] == q || ArrOfKnuckles[1 - 1, 3] == q || ArrOfKnuckles[1 + 1, 3] == q))
+                            if ((ArrOfKnuckles[1, 3 - 1] == q || ArrOfKnuckles[1 - 1, 3] == q || ArrOfKnuckles[1 + 1, 3] == q))
                             {
                                 x++;
                                 break;
@@ -187,7 +188,7 @@ namespace Game
                             }
                             break;
                         }
-                        if ( ArrOfKnuckles[0, 1] == 0)
+                        if (ArrOfKnuckles[0, 1] == 0)
                         {
                             if ((ArrOfKnuckles[0 + 1, 1] == q || ArrOfKnuckles[0, 1 - 1] == q || ArrOfKnuckles[0, 1 + 1] == q))
                             {
