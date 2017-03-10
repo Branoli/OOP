@@ -114,8 +114,8 @@ namespace EXEWOW
                 {
                     for (int j = 0; j < MasButtom.GetLength(1); j++)
                     {
-                        x = gen.Next(0, 4);
-                        y = gen.Next(0, 4);
+                        x = gen.Next(0, MasButtom.GetLength(0));
+                        y = gen.Next(0, MasButtom.GetLength(1));
                         Button bt = new Button();
 
                         bt.Location = new Point(MasButtom[x, y].Location.X, MasButtom[x, y].Location.Y);
